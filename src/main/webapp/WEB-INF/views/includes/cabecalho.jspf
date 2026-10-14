@@ -1,0 +1,47 @@
+<%@ page pageEncoding="UTF-8" %>
+<%-- Layout compartilhado (abre a página). Antes do include, a página define:
+     ctx, paginaTitulo e menuAtivo com <c:set>. Os taglibs ficam na página. --%>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><c:out value="${paginaTitulo}"/> - HelpDesk</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23F5C518' d='M4 8a2 2 0 0 1 2-2h20a2 2 0 0 1 2 2v4a4 4 0 0 0 0 8v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4a4 4 0 0 0 0-8z'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="${ctx}/css/estilo.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="app">
+    <aside class="lateral">
+        <a class="marca" href="${ctx}/home">
+            <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+                <path fill="#F5C518" d="M4 8a2 2 0 0 1 2-2h20a2 2 0 0 1 2 2v4a4 4 0 0 0 0 8v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4a4 4 0 0 0 0-8z"/>
+                <path stroke="#12262F" stroke-width="2" stroke-dasharray="2 2.5" d="M12 10v12"/>
+            </svg>
+            HelpDesk
+        </a>
+
+        <nav class="nav" aria-label="Principal">
+            <a class="nav__item ${menuAtivo == 'home' ? 'is-ativo' : ''}" href="${ctx}/home">Início</a>
+
+            <c:if test="${sessionScope.usuarioLogado.perfil == 'ADMIN'}">
+                <a class="nav__item ${menuAtivo == 'categorias' ? 'is-ativo' : ''}" href="${ctx}/categorias">Categorias</a>
+            </c:if>
+
+            <a class="nav__item ${menuAtivo == 'solicitacoes' ? 'is-ativo' : ''}" href="${ctx}/solicitacoes">Solicitações</a>
+
+            <c:if test="${sessionScope.usuarioLogado.perfil == 'ADMIN'}">
+                <a class="nav__item ${menuAtivo == 'usuarios' ? 'is-ativo' : ''}" href="${ctx}/usuarios">Usuários</a>
+            </c:if>
+        </nav>
+
+        <div class="usuario">
+            <span class="usuario__nome"><c:out value="${sessionScope.usuarioLogado.nome}"/></span>
+            <span class="usuario__perfil"><c:out value="${sessionScope.usuarioLogado.perfilRotulo}"/></span>
+            <a class="usuario__sair" href="${ctx}/logout">Sair</a>
+        </div>
+    </aside>
+
+    <main id="conteudo" class="conteudo">
