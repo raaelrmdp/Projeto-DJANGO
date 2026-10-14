@@ -1,0 +1,37 @@
+HELPDESK - COMO RODAR
+
+1) Banco de dados
+   Rode sql/schema.sql no MySQL (Workbench: abrir o arquivo e clicar no raio).
+   O projeto conecta em localhost:3306, banco "helpdesk", usuario "root", senha "admin123"
+   (arquivo src/main/java/bd/Conexao.java - mude la se a sua senha for outra).
+
+   Logins de teste:
+     admin@helpdesk.com   / admin123    (Administrador)
+     tecnico@helpdesk.com / tecnico123  (Tecnico)
+     aluno@helpdesk.com   / aluno123    (Solicitante)
+
+2) Rodar SEM Eclipse
+   Windows:    de dois cliques em executar.bat
+   Mac/Linux:  ./executar.sh
+   Na primeira vez baixa Maven e Tomcat 11 para a pasta .ferramentas (precisa de internet)
+   e exige Java 21+. Depois abre http://localhost:8080/HelpDesk/ no navegador.
+   Para parar: Ctrl+C (ou feche a janela).
+
+   Se a porta 8080 estiver ocupada, feche o outro Tomcat/Eclipse antes.
+
+3) Rodar COM Eclipse
+   Importar como "Existing Maven Projects", Maven > Update Project,
+   botao direito > Run As > Run on Server (Tomcat 11).
+
+4) Rodar a mao (Tomcat ja instalado)
+   mvn -DskipTests clean package
+   copie target/HelpDesk.war para a pasta webapps do Tomcat 11 e inicie o Tomcat.
+
+5) Solicitacoes (chamados) - quem pode o que
+   SOLICITANTE  abre chamados; ve so os proprios; conversa; cancela enquanto ABERTA;
+                quando RESOLVIDA, confirma (fecha) ou reabre.
+   TECNICO      ve todos; assume chamado ABERTA sem tecnico; resolve os que sao dele; conversa.
+   ADMIN        ve todos; assume; atribui a um tecnico; resolve; fecha; reabre; cancela.
+   Situacoes: ABERTA -> EM_ATENDIMENTO -> RESOLVIDA -> FECHADA  (ou CANCELADA).
+   Chamado FECHADO ou CANCELADO nao aceita mais mensagens.
+   As regras ficam em src/main/java/service/SolicitacaoRegras.java (servidor bloqueia, tela so mostra o botao).
